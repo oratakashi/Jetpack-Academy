@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.MainActivity">
+
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <com.fxn.BubbleTabBar
+        android:id="@+id/bnMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/padding_30"
+        android:background="#00FFFFFF"
+        android:padding="7dp"
+        app:bubbletab_custom_font="@font/semibold"
+        app:bubbletab_disabled_icon_color="@color/white"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_icon_padding="5sp"
+        app:bubbletab_icon_size="@dimen/size_18"
+        app:bubbletab_menuResource="@menu/menu_main"
+        app:bubbletab_title_size="@dimen/font_14"
+        app:bubbletab_vertical_padding="10dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bnMenu"
+        android:layout_marginTop="@dimen/margin_10" />
+</RelativeLayout>
