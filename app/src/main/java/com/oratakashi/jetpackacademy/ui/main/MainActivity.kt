@@ -11,10 +11,13 @@ import com.fxn.BubbleTabBar
 import com.fxn.OnBubbleClickListener
 import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.utils.ImageHelper
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 @Suppress("DEPRECATION")
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MainInterface.Activity {
 
     private val adapter: MainAdapter by lazy {
@@ -59,7 +62,9 @@ class MainActivity : AppCompatActivity(), MainInterface.Activity {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 tabs.setSelected(position)
-                child[position].setExpanded()
+                if(child.isNotEmpty()){
+                    child[position].setExpanded()
+                }
             }
         })
     }

@@ -47,11 +47,14 @@
                     android:orientation="vertical">
 
                     <com.ndroid.CoolEditText
+                        android:id="@+id/etSearch"
                         style="@style/coolEditTextFlat"
                         android:layout_marginTop="@dimen/margin_10"
                         android:drawableStart="@drawable/ic_search"
                         android:drawablePadding="@dimen/padding_10"
-                        android:focusable="false"
+                        android:imeOptions="actionDone"
+                        android:maxLines="1"
+                        android:inputType="text"
                         android:hint="@string/title_pencarian" />
 
                     <TextView
@@ -63,11 +66,81 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/font_18" />
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shLoading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_16">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                android:layout_marginBottom="@dimen/margin_10">
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                android:layout_marginBottom="@dimen/margin_10">
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                android:layout_marginBottom="@dimen/margin_10">
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/size_220"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/margin_5"
+                                    android:background="@drawable/ic_placeholder"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_16"
+                        android:visibility="gone"
                         android:nestedScrollingEnabled="false" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

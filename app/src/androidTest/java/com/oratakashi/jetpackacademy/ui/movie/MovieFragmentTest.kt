@@ -1,34 +1,51 @@
 package com.oratakashi.jetpackacademy.ui.movie
 
-import android.content.Intent
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.ui.main.MainActivity
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import com.oratakashi.jetpackacademy.utils.RecyclerViewItemCountAssertion
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
+@HiltAndroidTest
 class MovieFragmentTest {
     @get:Rule
-    val activityRule: ActivityTestRule<MainActivity> =
-        ActivityTestRule<MainActivity>(MainActivity::class.java)
+    var hiltRule = HiltAndroidRule(this)
+
+    @Suppress("DEPRECATION")
+    @get:Rule
+    var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
     fun setUp() {
-        activityRule.launchActivity(Intent())
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.espressoTestIdlingResource)
     }
 
     @Test
     fun loadMovies() {
-        onView(withId(R.id.rvMovie))
-            .check(matches(isDisplayed()))
-        onView(withId(R.id.rvMovie))
-            .check(RecyclerViewItemCountAssertion(10))
+        Espresso.onView(withId(R.id.rvMovie))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Thread.sleep(3000)
+        Espresso.onView(withId(R.id.rvMovie))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
+        Espresso.onView(withId(R.id.rvMovie))
+            .check(RecyclerViewItemCountAssertion(20))
     }
 }

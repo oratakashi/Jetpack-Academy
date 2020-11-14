@@ -1,23 +1,36 @@
 package com.oratakashi.jetpackacademy.ui.tv
 
-import com.oratakashi.jetpackacademy.data.DataTv
+import com.oratakashi.jetpackacademy.data.FakeRemoteRepository
+import io.reactivex.disposables.CompositeDisposable
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class TvViewModelTest {
 
-    lateinit var viewModel: TvViewModel
+    lateinit var fakeRemoteRepository: FakeRemoteRepository
+    lateinit var disposible : CompositeDisposable
 
     @Before
     fun setup() {
-        viewModel = TvViewModel()
+        fakeRemoteRepository = FakeRemoteRepository()
     }
 
     @Test
     fun testGetData() {
-        val data: List<DataTv> = viewModel.getData()
-        Assert.assertNotNull(data)
-        Assert.assertEquals(10, data.size)
+        val getData = fakeRemoteRepository.getTv()
+            .blockingGet()
+
+        Assert.assertNotNull(getData.data)
+        Assert.assertEquals(20, getData.data?.size)
+    }
+
+    @Test
+    fun testSearchData(){
+        val getData = fakeRemoteRepository.searchTv("Love")
+            .blockingGet()
+
+        Assert.assertNotNull(getData.data)
+        Assert.assertEquals(20, getData.data?.size)
     }
 }

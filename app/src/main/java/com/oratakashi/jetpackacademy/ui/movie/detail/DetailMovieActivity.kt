@@ -5,15 +5,18 @@ import android.transition.Fade
 import android.transition.Slide
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import com.oratakashi.jetpackacademy.BuildConfig
 import com.oratakashi.jetpackacademy.R
-import com.oratakashi.jetpackacademy.data.DataMovie
+import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
+import com.oratakashi.jetpackacademy.utils.Converter
 import com.oratakashi.jetpackacademy.utils.ImageHelper
+import com.oratakashi.jetpackacademy.utils.ImageOrientation
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 
 class DetailMovieActivity : AppCompatActivity() {
 
-    val data: DataMovie by lazy {
-        intent.getParcelableExtra<DataMovie>("data")!!
+    private val data : DataMovie? by lazy {
+        intent.getParcelableExtra<DataMovie>("data")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,20 +31,28 @@ class DetailMovieActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_detail_movie)
 
-        val photo = resources.getIdentifier(
-            "com.oratakashi.jetpackacademy:drawable/"
-                    + data.img.substring(10, data.img.length),
-            null, null
-        )
+        if(data != null){
+            tvTitle.text = data?.title
+            tvDescription.text = data?.overview
+            tvReleaseDate.text = Converter.dateFormat(
+                data?.release_date!!,
+                "yyyy-mm-dd",
+                "dd MMMM yyyy"
+            )
+            ImageHelper.getPicasso(
+                ivPhoto,
+                BuildConfig.IMAGE_URL + data?.poster_path,
+                ImageOrientation.Vertical
+            )
+            ImageHelper.getPicasso(
+                ivImage,
+                BuildConfig.IMAGE_URL + data?.backdrop_path,
+                ImageOrientation.Horizontal
+            )
+        }else{
+            finish()
+        }
 
-        ImageHelper.getDrawable(ivImage, photo)
-        ImageHelper.getDrawable(ivPhoto, photo)
-
-        tvTitle.text = data.title.trim()
-        tvReleaseDate.text = data.date
-        tvDuration.text = data.duration
-        tvLanguage.text = data.language
-        tvDescription.text = data.description
 
         fab.setOnClickListener { finish() }
     }

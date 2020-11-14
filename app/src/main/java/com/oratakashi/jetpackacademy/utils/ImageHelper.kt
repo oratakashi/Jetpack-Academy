@@ -24,11 +24,17 @@ object ImageHelper {
     fun getPicasso(
         imageView: ImageView,
         image_url: String?,
+        orientation: ImageOrientation = ImageOrientation.Vertical,
         callback: Return? = null,
         loading: ShimmerFrameLayout? = null
     ) {
         Picasso.get().load(image_url)
-            .placeholder(R.drawable.img_no_images)
+            .placeholder(
+                when(orientation){
+                    ImageOrientation.Vertical   -> R.drawable.placeholder_portrait
+                    ImageOrientation.Horizontal -> R.drawable.placeholder_landscape
+                }
+            )
             .error(R.drawable.img_no_images)
             .into(imageView, object : Callback {
                 override fun onSuccess() {
@@ -43,6 +49,35 @@ object ImageHelper {
             })
     }
 
+    fun getPicassoCompress(
+        imageView: ImageView,
+        image_url: String?,
+        orientation: ImageOrientation = ImageOrientation.Vertical,
+        callback: Return? = null,
+        loading: ShimmerFrameLayout? = null
+    ) {
+        Picasso.get().load(image_url)
+            .placeholder(
+                when(orientation){
+                    ImageOrientation.Vertical   -> R.drawable.placeholder_portrait
+                    ImageOrientation.Horizontal -> R.drawable.placeholder_landscape
+                }
+            )
+            .resize(250, 400)
+
+            .error(R.drawable.img_no_images)
+            .into(imageView, object : Callback {
+                override fun onSuccess() {
+                    callback?.onImageLoaded(imageView, loading)
+                }
+
+                override fun onError(e: Exception) {
+                    Log.e("Picasso", e.message!!)
+                    Log.e("Picasso_URl", image_url!!)
+                    callback?.onImageFailed(e.message!!)
+                }
+            })
+    }
 
     interface Return {
         fun onImageLoaded(

@@ -1,34 +1,35 @@
 package com.oratakashi.jetpackacademy.ui.movie
 
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.oratakashi.jetpackacademy.R
-import com.oratakashi.jetpackacademy.data.DataMovie
+import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.movie.detail.DetailMovieActivity
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
 
-    private val data: MutableList<DataMovie> by lazy {
+    private val data : MutableList<DataMovie> by lazy {
         ArrayList<DataMovie>()
     }
 
-    private val adapter: MovieAdapter by lazy {
+    private val adapter : MovieAdapter by lazy {
         MovieAdapter(data, this)
-    }
-
-    private val viewModel: MovieViewModel by lazy {
-        ViewModelProviders.of(this).get(MovieViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,16 +38,47 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
         parent.registerFragment(this)
 
         rvMovie.also {
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.adapter = adapter
-            it.layoutManager = GridLayoutManager(
-                requireContext(),
-                2
-            )
         }
 
-        data.addAll(viewModel.getData())
-        adapter.notifyItemInserted(0)
+        viewModel.state.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is MovieState.Loading   -> {
+                    shLoading.visibility = View.VISIBLE
+                    rvMovie.visibility = View.GONE
+                    shLoading.startShimmerAnimation()
+                }
+                is MovieState.Result    -> {
+                    shLoading.stopShimmerAnimation()
+                    shLoading.visibility = View.GONE
+                    rvMovie.visibility = View.VISIBLE
 
+                    it.data.data.let { movies ->
+                        if(movies != null){
+                            data.clear()
+                            data.addAll(movies)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                }
+                is MovieState.Error     -> {
+                    shLoading.stopShimmerAnimation()
+                    shLoading.visibility = View.GONE
+                    rvMovie.visibility = View.VISIBLE
+
+                    dialog.setMessage(it.error.message)
+                        .create()
+                        .show()
+                }
+            }
+        })
+
+        viewModel.setupSearch(etSearch)
+
+        if(savedInstanceState == null){
+            viewModel.getMovie()
+        }
     }
 
     override fun onCreateView(
@@ -78,4 +110,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
             }, ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle()
         )
     }
+
+    private val viewModel : MovieViewModel by viewModels()
+    @Inject lateinit var dialog : AlertDialog.Builder
 }

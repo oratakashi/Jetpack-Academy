@@ -10,7 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_220"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         android:src="@drawable/img_no_images" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shLoading"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_220">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/placeholder_bg"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <TextView
         android:id="@+id/tvTitle"

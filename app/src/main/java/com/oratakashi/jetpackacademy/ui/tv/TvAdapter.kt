@@ -1,12 +1,12 @@
 package com.oratakashi.jetpackacademy.ui.tv
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.oratakashi.jetpackacademy.BuildConfig
 import com.oratakashi.jetpackacademy.R
-import com.oratakashi.jetpackacademy.data.DataTv
+import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 import com.oratakashi.jetpackacademy.utils.ImageHelper
 import kotlinx.android.synthetic.main.adapter_tv.view.*
 
@@ -17,18 +17,12 @@ class TvAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.also {
-            it.tvTitle.text = data[position].title
-            Log.e("debug", "img : ${data[position].img}")
-            val photo = it.context.resources.getIdentifier(
-                "com.oratakashi.jetpackacademy:drawable/"
-                        + data[position].img.substring(10, data[position].img.length),
-                null, null
+            it.tvTitle.text = data[position].name
+            ImageHelper.getPicassoCompress(
+                it.ivImage,
+                BuildConfig.IMAGE_URL + data[position].poster_path
             )
-            ImageHelper.getDrawable(it.ivImage, photo)
-
-            it.setOnClickListener {
-                parent.onClickMenu(data[position])
-            }
+            it.setOnClickListener { parent.onClickMenu(data[position]) }
         }
     }
 
