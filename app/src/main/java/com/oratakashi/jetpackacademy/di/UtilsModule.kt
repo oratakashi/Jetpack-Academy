@@ -2,6 +2,7 @@ package com.oratakashi.jetpackacademy.di
 
 import android.app.AlertDialog
 import android.content.Context
+import androidx.paging.PagedList
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,14 @@ class UtilsModule {
         .setPositiveButton("OK"){ dialog, _ ->
             dialog.dismiss()
         }
+
+    @Provides
+    @Singleton
+    fun provideConfig() : PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(1)
+        .setMaxSize(5)
+        .setInitialLoadSizeHint(1)
+        .setPrefetchDistance(1)
+        .setEnablePlaceholders(true)
+        .build()
 }

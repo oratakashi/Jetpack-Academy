@@ -1,6 +1,9 @@
 package com.oratakashi.jetpackacademy.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagedList
+import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.data.repository.remote.RemoteRepository
 import com.oratakashi.jetpackacademy.ui.movie.MovieState
 import com.oratakashi.jetpackacademy.ui.tv.TvState
@@ -18,6 +21,21 @@ class DataRepository @Inject constructor(
 
     override fun searchMovie(query: String, callback: MutableLiveData<MovieState>) {
         remoteRepository.searchMovie(query, callback)
+    }
+
+    override fun getMovieLimit(
+        callback: MutableLiveData<MovieState>,
+        data: MutableLiveData<PagedList<DataMovie>>
+    ) {
+        remoteRepository.getMovieLimit(callback, data)
+    }
+
+    override fun searchMovieLimit(
+        query: String,
+        callback: MutableLiveData<MovieState>,
+        data: MutableLiveData<PagedList<DataMovie>>
+    ) {
+        remoteRepository.searchMovieLimit(query, callback, data)
     }
 
     override fun getTv(callback: MutableLiveData<TvState>) {

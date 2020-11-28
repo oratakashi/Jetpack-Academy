@@ -16,7 +16,6 @@ import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.movie.detail.DetailMovieActivity
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
@@ -29,7 +28,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
     }
 
     private val adapter : MovieAdapter by lazy {
-        MovieAdapter(data, this)
+        MovieAdapter(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +40,8 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.adapter = adapter
         }
+
+        viewModel.getMovie()
 
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it){
@@ -54,13 +55,13 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     shLoading.visibility = View.GONE
                     rvMovie.visibility = View.VISIBLE
 
-                    it.data.data.let { movies ->
-                        if(movies != null){
-                            data.clear()
-                            data.addAll(movies)
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
+//                    it.data.data.let { movies ->
+//                        if(movies != null){
+//                            data.clear()
+//                            data.addAll(movies)
+//                            adapter.notifyDataSetChanged()
+//                        }
+//                    }
                 }
                 is MovieState.Error     -> {
                     shLoading.stopShimmerAnimation()
@@ -73,12 +74,12 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                 }
             }
         })
+        viewModel.data.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
 
         viewModel.setupSearch(etSearch)
 
-        if(savedInstanceState == null){
-            viewModel.getMovie()
-        }
     }
 
     override fun onCreateView(
@@ -101,6 +102,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
 
     override fun setExpanded() {
         BottomSheetBehavior.from(bottom_sheet).state = BottomSheetBehavior.STATE_EXPANDED
+        bottom_sheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
     }
 
     override fun onClickMenu(data: DataMovie) {

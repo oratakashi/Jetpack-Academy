@@ -52,9 +52,7 @@ object ImageHelper {
     fun getPicassoCompress(
         imageView: ImageView,
         image_url: String?,
-        orientation: ImageOrientation = ImageOrientation.Vertical,
-        callback: Return? = null,
-        loading: ShimmerFrameLayout? = null
+        orientation: ImageOrientation = ImageOrientation.Vertical
     ) {
         Picasso.get().load(image_url)
             .placeholder(
@@ -68,13 +66,12 @@ object ImageHelper {
             .error(R.drawable.img_no_images)
             .into(imageView, object : Callback {
                 override fun onSuccess() {
-                    callback?.onImageLoaded(imageView, loading)
+
                 }
 
                 override fun onError(e: Exception) {
                     Log.e("Picasso", e.message!!)
                     Log.e("Picasso_URl", image_url!!)
-                    callback?.onImageFailed(e.message!!)
                 }
             })
     }

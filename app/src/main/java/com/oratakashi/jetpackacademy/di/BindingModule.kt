@@ -4,6 +4,7 @@ import com.oratakashi.jetpackacademy.data.repository.DataRepository
 import com.oratakashi.jetpackacademy.data.repository.Repository
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 

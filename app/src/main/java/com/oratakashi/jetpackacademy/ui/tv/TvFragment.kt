@@ -99,6 +99,7 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
 
     override fun setExpanded() {
         BottomSheetBehavior.from(bottom_sheet).state = BottomSheetBehavior.STATE_EXPANDED
+        bottom_sheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
     }
 
     override fun onClickMenu(data: DataTv) {
