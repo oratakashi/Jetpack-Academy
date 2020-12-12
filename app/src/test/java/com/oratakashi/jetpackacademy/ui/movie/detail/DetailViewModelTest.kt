@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Looper.getMainLooper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.toFlowable
@@ -69,17 +70,23 @@ class DetailViewModelTest {
         getData.data?.forEachIndexed { index, value ->
             val insertCode = db.movie().add(value)
             println("Inserted data ${index + 1} : ${value.title}")
-            Assert.assertNotNull(insertCode)
-            Assert.assertTrue(insertCode > 0)
+//            Assert.assertNotNull(insertCode)
+//            Assert.assertTrue(insertCode > 0)
         }
 
-        val getDataDb =  db.movie().getData().toLiveData(config).observeForever{ value ->
-            println("test")
-            value.config
-        }
+        val getDataDb =  db.movie().getData().toLiveData(1)
+
+        println(getDataDb.hasActiveObservers())
+        println(getDataDb.hasObservers())
+
 
         var pagedList : PagedList<DataMovie>? = null
 
+        val observer : Observer<PagedList<DataMovie>> = Observer<PagedList<DataMovie>>{
+            println(it)
+            pagedList = it
+        }
+        getDataDb.observeForever(observer)
         val getDataList = db.movie().getDataList()
 
         getDataList.forEach {
