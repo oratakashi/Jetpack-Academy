@@ -38,17 +38,20 @@ class MainActivity : AppCompatActivity(), MainInterface.Activity {
 
         ImageHelper.getPicasso(
             ivBackground,
-            "https://benderranews.com/wp-content/uploads/2018/08/400x590-B2G3-OVO.jpg"
+            "https://s3.giladiskon.com/images/deals/deals-TIX-ID-Promo-Daftar-DANA-Langsung-Dapat-Voucher-Diskon-50-1581488225.jpg"
         )
         reduceDragSensitivity()
-        vpMain.adapter = adapter
-        vpMain.offscreenPageLimit = 2
+        vpMain.also {
+            it.adapter = adapter
+            it.offscreenPageLimit = 3
+        }
         bnMenu.setupViewPager(vpMain)
         bnMenu.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when (id) {
                     R.id.navigation_movie -> vpMain.setCurrentItem(0, true)
                     R.id.navigation_tv -> vpMain.setCurrentItem(1, true)
+                    R.id.navigation_fav -> vpMain.setCurrentItem(2, true)
                 }
             }
         })

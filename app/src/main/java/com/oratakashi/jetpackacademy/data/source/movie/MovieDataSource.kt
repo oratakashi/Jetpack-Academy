@@ -30,9 +30,9 @@ class MovieDataSource @Inject constructor(
         callback: LoadInitialCallback<Int, DataMovie>
     ) {
 
-        endpoint.getMovieLimit(params.requestedLoadSize)
+        endpoint.getMovie(1)
             .map<MovieState>{
-                callback.onResult(it.data!!.toMutableList(), null, 2)
+                callback.onResult(it.data!!.toMutableList(), 1, 2)
                 MovieState.Result(it)
             }
             .onErrorReturn(MovieState::Error)
@@ -43,7 +43,7 @@ class MovieDataSource @Inject constructor(
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, DataMovie>) {
-        endpoint.getMovieLimit(params.key)
+        endpoint.getMovie(params.key)
             .map<MovieState>{
                 callback.onResult(it.data!!.toMutableList(), params.key + 1)
                 MovieState.Result(it)

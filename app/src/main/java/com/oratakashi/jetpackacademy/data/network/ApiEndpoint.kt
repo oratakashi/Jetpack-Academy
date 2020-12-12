@@ -8,39 +8,23 @@ import retrofit2.http.Query
 
 interface ApiEndpoint {
     @GET("movie/upcoming")
-    fun getMovie() : Single<ResponseMovie>
-
-    @GET("movie/upcoming")
-    fun getMovieLimit(
+    fun getMovie(
         @Query("page") page : Int
     ) : Single<ResponseMovie>
 
     @GET("search/movie")
     fun searchMovie(
-        @Query("query") query: String
-    ) : Single<ResponseMovie>
-
-    @GET("search/movie")
-    fun searchMovieLimit(
         @Query("query") query: String,
         @Query("page") page : Int
     ) : Single<ResponseMovie>
 
     @GET("tv/airing_today")
-    fun getTv() : Single<ResponseTv>
-
-    @GET("tv/airing_today")
-    fun getTvLimit(
+    fun getTv(
         @Query("page") page : Int
     ) : Single<ResponseTv>
 
     @GET("search/tv")
     fun searchTv(
-        @Query("query") query: String
-    ) : Single<ResponseTv>
-
-    @GET("search/tv")
-    fun searchTvLimit(
         @Query("query") query: String,
         @Query("page") page : Int
     ) : Single<ResponseTv>

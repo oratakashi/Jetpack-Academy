@@ -5,6 +5,7 @@ import com.oratakashi.jetpackacademy.data.repository.Repository
 import com.oratakashi.jetpackacademy.data.source.movie.MovieDataSource
 import com.oratakashi.jetpackacademy.data.source.movie.MovieSearchDataSource
 import com.oratakashi.jetpackacademy.data.source.tv.TvDataSource
+import com.oratakashi.jetpackacademy.data.source.tv.TvSearchDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,4 +32,10 @@ class DataSourceModule {
     fun provideTvDataSource(
         endpoint: ApiEndpoint
     ) : TvDataSource = TvDataSource(endpoint)
+
+    @Provides
+    @Singleton
+    fun provideTvSearchDataSource(
+        endpoint: ApiEndpoint
+    ) : TvSearchDataSource = TvSearchDataSource(endpoint)
 }

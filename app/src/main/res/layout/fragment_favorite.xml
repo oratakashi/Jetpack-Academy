@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.favorite.FavoriteFragment">
+
+    <FrameLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_dialog"
+        app:behavior_peekHeight="270dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_10"
+            android:paddingEnd="@dimen/padding_16"
+            android:paddingBottom="@dimen/padding_10">
+            <View
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_3"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/line" />
+
+            <View
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_3"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_3"
+                android:layout_marginBottom="@dimen/padding_10"
+                android:background="@color/line" />
+
+            <com.fxn.BubbleTabBar
+                android:id="@+id/bnMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_10"
+                android:background="#00FFFFFF"
+                android:padding="7dp"
+                app:bubbletab_custom_font="@font/semibold"
+                app:bubbletab_disabled_icon_color="@color/black"
+                app:bubbletab_horizontal_padding="20dp"
+                app:bubbletab_icon_padding="5sp"
+                app:bubbletab_icon_size="@dimen/size_18"
+                app:bubbletab_menuResource="@menu/menu_fav"
+                app:bubbletab_title_size="@dimen/font_14"
+                app:bubbletab_vertical_padding="10dp" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vpFav"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

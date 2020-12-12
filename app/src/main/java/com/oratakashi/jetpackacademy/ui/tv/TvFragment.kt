@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.oratakashi.jetpackacademy.R
-import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.tv.detail.DetailTvActivity
@@ -25,12 +25,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
 
-    private val data : MutableList<DataTv> by lazy {
-        ArrayList<DataTv>()
-    }
-
     private val adapter : TvAdapter by lazy {
-        TvAdapter(data, this)
+        TvAdapter(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +37,7 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
         rvTv.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.adapter = adapter
+            it.isNestedScrollingEnabled = false
         }
 
         viewModel.state.observe(viewLifecycleOwner, Observer {
@@ -51,16 +48,12 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
                     shLoading.startShimmerAnimation()
                 }
                 is TvState.Result   -> {
-                    shLoading.stopShimmerAnimation()
-                    shLoading.visibility = View.GONE
-                    rvTv.visibility = View.VISIBLE
-
-                    it.data.data.let {tv ->
-                        if(tv != null){
-                            data.clear()
-                            data.addAll(tv)
-                            adapter.notifyDataSetChanged()
-                        }
+                    if(shLoading.isVisible){
+                        shLoading.stopShimmerAnimation()
+                        shLoading.visibility = View.GONE
+                    }
+                    if(!rvTv.isVisible){
+                        rvTv.visibility = View.VISIBLE
                     }
                 }
                 is TvState.Error    -> {
@@ -74,6 +67,7 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
                 }
             }
         })
+        viewModel.data.observe(viewLifecycleOwner, Observer(adapter::submitList))
 
         viewModel.setupSearch(etSearch)
         viewModel.getTv()

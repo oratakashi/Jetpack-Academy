@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 object ImageHelper {
     fun getDrawable(imageView: ImageView, image_url: Int) {
         Picasso.get().load(image_url)
+            .centerCrop()
             .placeholder(R.drawable.img_no_images)
             .error(R.drawable.img_no_images)
             .into(imageView, object : Callback {

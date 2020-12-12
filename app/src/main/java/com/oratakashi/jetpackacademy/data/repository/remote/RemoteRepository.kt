@@ -4,19 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.oratakashi.jetpackacademy.data.database.Storage
 import com.oratakashi.jetpackacademy.data.factory.Factory
 import com.oratakashi.jetpackacademy.data.factory.movie.MovieDataFactory
 import com.oratakashi.jetpackacademy.data.factory.movie.MovieSearchDataFactory
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
+import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 import com.oratakashi.jetpackacademy.data.network.ApiEndpoint
 import com.oratakashi.jetpackacademy.data.repository.Repository
 import com.oratakashi.jetpackacademy.ui.movie.MovieState
 import com.oratakashi.jetpackacademy.ui.tv.TvState
 import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
-import java.lang.UnsupportedOperationException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.UnsupportedOperationException
 
 
 class RemoteRepository @Inject constructor(
@@ -33,20 +35,6 @@ class RemoteRepository @Inject constructor(
         return disposable
     }
 
-    override fun getMovie(callback: MutableLiveData<MovieState>) {
-        endpoint.getMovie()
-            .map<MovieState>(MovieState::Result)
-            .onErrorReturn(MovieState::Error)
-            .toFlowable()
-            .startWith(MovieState.Loading).also {
-                EspressoIdlingResource.increment()
-            }
-            .subscribe(callback::postValue).also {
-                EspressoIdlingResource.decrement()
-            }
-            .let { return@let disposable::add }
-    }
-
     override fun getMovieLimit(
         callback: MutableLiveData<MovieState>,
         data: MutableLiveData<PagedList<DataMovie>>
@@ -56,9 +44,7 @@ class RemoteRepository @Inject constructor(
                 it.liveData = callback
             },
             config
-        ).build().observeForever{
-            data.postValue(it)
-        }
+        ).build().observeForever(data::postValue)
     }
 
     override fun searchMovieLimit(
@@ -72,50 +58,78 @@ class RemoteRepository @Inject constructor(
                 it.keyword = query
             },
             config
-        ).build().observeForever{
-            data.postValue(it)
-        }
+        ).build().observeForever(data::postValue)
     }
 
-    override fun searchMovie(query: String, callback: MutableLiveData<MovieState>) {
-        endpoint.searchMovie(query)
-            .map<MovieState>(MovieState::Result)
-            .onErrorReturn(MovieState::Error)
-            .toFlowable()
-            .startWith(MovieState.Loading).also {
-                EspressoIdlingResource.increment()
-            }
-            .subscribe(callback::postValue).also {
-                EspressoIdlingResource.decrement()
-            }
-            .let { return@let disposable::add }
+    override fun getTv(
+        callback: MutableLiveData<TvState>,
+        data: MutableLiveData<PagedList<DataTv>>
+    ) {
+        LivePagedListBuilder(
+            factory.tvDataFactory.also {
+                it.liveData = callback
+            },
+            config
+        ).build().observeForever(data::postValue)
     }
 
-    override fun getTv(callback: MutableLiveData<TvState>) {
-        endpoint.getTv()
-            .map<TvState>(TvState::Result)
-            .onErrorReturn(TvState::Error)
-            .toFlowable()
-            .startWith(TvState.Loading).also {
-                EspressoIdlingResource.increment()
-            }
-            .subscribe(callback::postValue).also {
-                EspressoIdlingResource.decrement()
-            }
-            .let { return@let disposable::add }
+    override fun searchTvLimit(
+        query: String,
+        callback: MutableLiveData<TvState>,
+        data: MutableLiveData<PagedList<DataTv>>
+    ) {
+        LivePagedListBuilder(
+            factory.tvSearchDataFactory.also {
+                it.keyword = query
+                it.liveData = callback
+            },
+            config
+        ).build().observeForever(data::postValue)
     }
 
-    override fun searchTv(query: String, callback: MutableLiveData<TvState>) {
-        endpoint.searchTv(query)
-            .map<TvState>(TvState::Result)
-            .onErrorReturn(TvState::Error)
-            .toFlowable()
-            .startWith(TvState.Loading).also {
-                EspressoIdlingResource.increment()
-            }
-            .subscribe(callback::postValue).also {
-                EspressoIdlingResource.decrement()
-            }
-            .let { return@let disposable::add }
+    override fun getFavMovie(
+        data: MutableLiveData<PagedList<DataMovie>>
+    ) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getFavTv(data: MutableLiveData<PagedList<DataTv>>) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun addData(data: DataMovie) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun checkData(data: DataMovie): List<DataMovie> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun deleteData(data: DataMovie) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun addData(data: DataTv) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun checkData(data: DataTv): List<DataTv> {
+        throw UnsupportedOperationException()
+    }
+
+    override fun deleteData(data: DataTv) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun searchFavMovie(query: String, data: MutableLiveData<PagedList<DataMovie>>) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun searchFavTv(query: String, data: MutableLiveData<PagedList<DataTv>>) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getDatabase(): Storage {
+        throw UnsupportedOperationException()
     }
 }

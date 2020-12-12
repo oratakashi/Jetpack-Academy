@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -39,6 +40,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
         rvMovie.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.adapter = adapter
+            it.isNestedScrollingEnabled = false
         }
 
         viewModel.getMovie()
@@ -51,17 +53,13 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     shLoading.startShimmerAnimation()
                 }
                 is MovieState.Result    -> {
-                    shLoading.stopShimmerAnimation()
-                    shLoading.visibility = View.GONE
-                    rvMovie.visibility = View.VISIBLE
-
-//                    it.data.data.let { movies ->
-//                        if(movies != null){
-//                            data.clear()
-//                            data.addAll(movies)
-//                            adapter.notifyDataSetChanged()
-//                        }
-//                    }
+                    if(shLoading.isVisible){
+                        shLoading.stopShimmerAnimation()
+                        shLoading.visibility = View.GONE
+                    }
+                    if(!rvMovie.isVisible){
+                        rvMovie.visibility = View.VISIBLE
+                    }
                 }
                 is MovieState.Error     -> {
                     shLoading.stopShimmerAnimation()
@@ -74,9 +72,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                 }
             }
         })
-        viewModel.data.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
+        viewModel.data.observe(viewLifecycleOwner, Observer(adapter::submitList))
 
         viewModel.setupSearch(etSearch)
 

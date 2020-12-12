@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.oratakashi.jetpackacademy"
         minSdkVersion 22
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -40,6 +40,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -83,6 +88,11 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
 
+    // Coroutines
+    implementation "androidx.room:room-ktx:2.2.5"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2'
+
     //Chucker
     implementation "com.github.chuckerteam.chucker:library:3.2.0"
 
@@ -92,6 +102,11 @@ dependencies {
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"
     implementation "androidx.paging:paging-rxjava2-ktx:2.1.2" // For Kotlin use paging-rxjava2-ktx
+
+    //Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    implementation "androidx.room:room-rxjava2:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
 
     //Instrument Test
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
@@ -106,9 +121,12 @@ dependencies {
 
     //Unit Test
     testImplementation 'junit:junit:4.13.1'
+    testImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation "org.robolectric:robolectric:4.4"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+    testImplementation "org.mockito:mockito-inline:2.27.0"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     testImplementation 'androidx.test:core:1.3.0'

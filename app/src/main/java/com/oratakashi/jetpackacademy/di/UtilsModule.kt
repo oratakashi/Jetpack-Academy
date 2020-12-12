@@ -3,6 +3,7 @@ package com.oratakashi.jetpackacademy.di
 import android.app.AlertDialog
 import android.content.Context
 import androidx.paging.PagedList
+import com.oratakashi.jetpackacademy.data.database.Storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +26,15 @@ class UtilsModule {
     @Provides
     @Singleton
     fun provideConfig() : PagedList.Config = PagedList.Config.Builder()
-        .setPageSize(1)
-        .setMaxSize(5)
-        .setInitialLoadSizeHint(1)
-        .setPrefetchDistance(1)
+        .setPageSize(2)
+        .setInitialLoadSizeHint(2)
+        .setPrefetchDistance(2)
         .setEnablePlaceholders(true)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideDataBase(
+        @ApplicationContext context: Context
+    ) : Storage = Storage(context)
 }

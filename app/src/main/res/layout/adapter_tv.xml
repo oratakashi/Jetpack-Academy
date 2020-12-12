@@ -9,7 +9,6 @@
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_220"
-        android:scaleType="centerCrop"
         android:src="@drawable/img_no_images" />
 
     <TextView

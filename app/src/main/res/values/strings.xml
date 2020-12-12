@@ -3,10 +3,13 @@
     <string name="app_description">Dicoding Submissions</string>
     <string name="title_movies">Movies</string>
     <string name="title_tv_show">TV Show</string>
+    <string name="title_fav">Favorite</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_pencarian">Pencarian</string>
     <string name="title_movie_header">Our Movie Collection</string>
+    <string name="title_fav_movie_header">Your Favorite Movies Collection</string>
+    <string name="title_fav_tv_header">Your Favorite Tv Collection</string>
     <string name="foo">Lorem Ipsum</string>
     <string name="title_tv_header">Our TV Show Collection</string>
     <string name="title_activity_detail_movie">ScrollingActivity</string>

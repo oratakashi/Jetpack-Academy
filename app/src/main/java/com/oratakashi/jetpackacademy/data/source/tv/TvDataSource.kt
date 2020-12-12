@@ -26,9 +26,9 @@ class TvDataSource @Inject constructor(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, DataTv>
     ) {
-        endpoint.getTv()
+        endpoint.getTv(1)
             .map<TvState>{
-                callback.onResult(it.data!!.toMutableList(), null, 2)
+                callback.onResult(it.data!!.toMutableList(), 1, 2)
                 TvState.Result(it)
             }
             .onErrorReturn(TvState::Error)
@@ -39,7 +39,7 @@ class TvDataSource @Inject constructor(
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, DataTv>) {
-        endpoint.getTv()
+        endpoint.getTv(params.key)
             .map<TvState>{
                 callback.onResult(it.data!!.toMutableList(), params.key + 1)
                 TvState.Result(it)

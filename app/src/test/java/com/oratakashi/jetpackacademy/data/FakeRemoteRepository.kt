@@ -56,14 +56,14 @@ class FakeRemoteRepository {
     }.build()
 
     fun getMovie() : Single<ResponseMovie> =
-        getRetrofit().create(ApiEndpoint::class.java).getMovie()
+        getRetrofit().create(ApiEndpoint::class.java).getMovie(1)
 
     fun searchMovie(keyword : String) : Single<ResponseMovie> =
-        getRetrofit().create(ApiEndpoint::class.java).searchMovie(keyword)
+        getRetrofit().create(ApiEndpoint::class.java).searchMovie(keyword, 1)
 
     fun getTv() : Single<ResponseTv> =
-        getRetrofit().create(ApiEndpoint::class.java).getTv()
+        getRetrofit().create(ApiEndpoint::class.java).getTv(1)
 
     fun searchTv(keyword: String) : Single<ResponseTv> =
-        getRetrofit().create(ApiEndpoint::class.java).searchTv(keyword)
+        getRetrofit().create(ApiEndpoint::class.java).searchTv(keyword, 1)
 }

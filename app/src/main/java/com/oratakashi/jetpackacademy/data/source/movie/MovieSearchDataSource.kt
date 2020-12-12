@@ -23,9 +23,9 @@ class MovieSearchDataSource @Inject constructor(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, DataMovie>
     ) {
-        endpoint.searchMovieLimit(keyword, 1)
+        endpoint.searchMovie(keyword, 1)
             .map<MovieState>{
-                callback.onResult(it.data!!.toMutableList(), null, 2)
+                callback.onResult(it.data!!.toMutableList(), 1, 2)
                 MovieState.Result(it)
             }
             .onErrorReturn(MovieState::Error)
@@ -36,7 +36,7 @@ class MovieSearchDataSource @Inject constructor(
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, DataMovie>) {
-        endpoint.searchMovieLimit(keyword, params.key)
+        endpoint.searchMovie(keyword, params.key)
             .map<MovieState>{
                 callback.onResult(it.data!!.toMutableList(), params.key + 1)
                 MovieState.Result(it)

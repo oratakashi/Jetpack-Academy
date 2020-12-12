@@ -1,12 +1,14 @@
 package com.oratakashi.jetpackacademy.di
 
 import androidx.paging.PagedList
+import com.oratakashi.jetpackacademy.data.database.Storage
 import com.oratakashi.jetpackacademy.data.factory.Factory
 import com.oratakashi.jetpackacademy.data.factory.movie.MovieDataFactory
 import com.oratakashi.jetpackacademy.data.factory.movie.MovieSearchDataFactory
 import com.oratakashi.jetpackacademy.data.network.ApiEndpoint
 import com.oratakashi.jetpackacademy.data.repository.DataRepository
 import com.oratakashi.jetpackacademy.data.repository.Repository
+import com.oratakashi.jetpackacademy.data.repository.local.LocalRepository
 import com.oratakashi.jetpackacademy.data.repository.remote.RemoteRepository
 import dagger.Binds
 import dagger.Module
@@ -32,7 +34,18 @@ class RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideLocalRepository(
+        storage : Storage,
+        config : PagedList.Config
+    ) : LocalRepository = LocalRepository(storage, config)
+
+    @Singleton
+    @Provides
     fun provideDataRepository(
-        remoteRepository: RemoteRepository
-    ) : DataRepository = DataRepository(remoteRepository)
+        remoteRepository: RemoteRepository,
+        localRepository: LocalRepository
+    ) : DataRepository = DataRepository(
+        remoteRepository,
+        localRepository
+    )
 }
