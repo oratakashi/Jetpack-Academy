@@ -57,8 +57,8 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
                     }
                 }
                 is TvState.Error    -> {
-                    shLoading.stopShimmerAnimation()
                     shLoading.visibility = View.GONE
+                    shLoading.stopShimmerAnimation()
                     rvTv.visibility = View.VISIBLE
 
                     dialog.setMessage(it.error.message)

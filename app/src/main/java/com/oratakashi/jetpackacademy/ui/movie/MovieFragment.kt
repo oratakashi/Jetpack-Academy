@@ -62,8 +62,8 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     }
                 }
                 is MovieState.Error     -> {
-                    shLoading.stopShimmerAnimation()
                     shLoading.visibility = View.GONE
+                    shLoading.stopShimmerAnimation()
                     rvMovie.visibility = View.VISIBLE
 
                     dialog.setMessage(it.error.message)

@@ -24,7 +24,4 @@ interface MovieDao {
 
     @Delete
     fun delete(data : DataMovie)
-
-    @Query("DELETE From movie")
-    fun delete()
 }

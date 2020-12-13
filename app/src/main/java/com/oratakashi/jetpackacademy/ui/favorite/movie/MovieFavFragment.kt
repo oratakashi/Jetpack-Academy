@@ -29,7 +29,7 @@ class MovieFavFragment : Fragment(), MovieInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvMovie.also {
+        rvFavMovie.also {
             it.adapter = adapter
             it.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }

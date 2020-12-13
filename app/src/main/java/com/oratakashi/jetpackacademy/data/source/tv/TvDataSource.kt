@@ -33,8 +33,12 @@ class TvDataSource @Inject constructor(
             }
             .onErrorReturn(TvState::Error)
             .toFlowable()
-            .startWith(TvState.Loading)
-            .subscribe(liveData::postValue)
+            .startWith(TvState.Loading).also {
+                EspressoIdlingResource.increment()
+            }
+            .subscribe(liveData::postValue).also {
+                EspressoIdlingResource.decrement()
+            }
             .let { return@let disposable::add }
     }
 

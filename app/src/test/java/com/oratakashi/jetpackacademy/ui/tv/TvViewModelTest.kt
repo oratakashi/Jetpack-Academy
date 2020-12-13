@@ -9,7 +9,7 @@ import org.junit.Test
 class TvViewModelTest {
 
     lateinit var fakeRemoteRepository: FakeRemoteRepository
-    lateinit var disposible : CompositeDisposable
+    lateinit var disposible: CompositeDisposable
 
     @Before
     fun setup() {
@@ -26,7 +26,7 @@ class TvViewModelTest {
     }
 
     @Test
-    fun testSearchData(){
+    fun testSearchData() {
         val getData = fakeRemoteRepository.searchTv("Love")
             .blockingGet()
 

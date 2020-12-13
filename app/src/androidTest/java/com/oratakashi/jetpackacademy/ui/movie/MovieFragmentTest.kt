@@ -6,6 +6,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.oratakashi.jetpackacademy.R
@@ -14,6 +15,8 @@ import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import com.oratakashi.jetpackacademy.utils.RecyclerViewItemCountAssertion
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -40,12 +43,11 @@ class MovieFragmentTest {
 
     @Test
     fun loadMovies() {
-        Espresso.onView(withId(R.id.rvMovie))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
         Thread.sleep(3000)
-        Espresso.onView(withId(R.id.rvMovie))
+        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
-        Espresso.onView(withId(R.id.rvMovie))
+        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
             .check(RecyclerViewItemCountAssertion(20))
     }
 }

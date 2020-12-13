@@ -16,6 +16,9 @@ import com.oratakashi.jetpackacademy.ui.movie.MovieState
 import com.oratakashi.jetpackacademy.ui.tv.TvState
 import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.UnsupportedOperationException
@@ -39,12 +42,14 @@ class RemoteRepository @Inject constructor(
         callback: MutableLiveData<MovieState>,
         data: MutableLiveData<PagedList<DataMovie>>
     ) {
-        LivePagedListBuilder(
-            factory.movieDataFactory.also {
-                it.liveData = callback
-            },
-            config
-        ).build().observeForever(data::postValue)
+        CoroutineScope(Dispatchers.Main).launch {
+            LivePagedListBuilder(
+                factory.movieDataFactory.also {
+                    it.liveData = callback
+                },
+                config
+            ).build().observeForever(data::postValue)
+        }
     }
 
     override fun searchMovieLimit(
@@ -52,25 +57,29 @@ class RemoteRepository @Inject constructor(
         callback: MutableLiveData<MovieState>,
         data: MutableLiveData<PagedList<DataMovie>>
     ) {
-        LivePagedListBuilder(
-            factory.movieSearchDataFactory.also {
-                it.liveData = callback
-                it.keyword = query
-            },
-            config
-        ).build().observeForever(data::postValue)
+        CoroutineScope(Dispatchers.Main).launch {
+            LivePagedListBuilder(
+                factory.movieSearchDataFactory.also {
+                    it.liveData = callback
+                    it.keyword = query
+                },
+                config
+            ).build().observeForever(data::postValue)
+        }
     }
 
     override fun getTv(
         callback: MutableLiveData<TvState>,
         data: MutableLiveData<PagedList<DataTv>>
     ) {
-        LivePagedListBuilder(
-            factory.tvDataFactory.also {
-                it.liveData = callback
-            },
-            config
-        ).build().observeForever(data::postValue)
+        CoroutineScope(Dispatchers.Main).launch {
+            LivePagedListBuilder(
+                factory.tvDataFactory.also {
+                    it.liveData = callback
+                },
+                config
+            ).build().observeForever(data::postValue)
+        }
     }
 
     override fun searchTvLimit(
@@ -78,13 +87,15 @@ class RemoteRepository @Inject constructor(
         callback: MutableLiveData<TvState>,
         data: MutableLiveData<PagedList<DataTv>>
     ) {
-        LivePagedListBuilder(
-            factory.tvSearchDataFactory.also {
-                it.keyword = query
-                it.liveData = callback
-            },
-            config
-        ).build().observeForever(data::postValue)
+        CoroutineScope(Dispatchers.Main).launch {
+            LivePagedListBuilder(
+                factory.tvSearchDataFactory.also {
+                    it.keyword = query
+                    it.liveData = callback
+                },
+                config
+            ).build().observeForever(data::postValue)
+        }
     }
 
     override fun getFavMovie(

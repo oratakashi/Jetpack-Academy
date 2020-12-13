@@ -5,6 +5,7 @@ import androidx.paging.PageKeyedDataSource
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.data.network.ApiEndpoint
 import com.oratakashi.jetpackacademy.ui.movie.MovieState
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -30,8 +31,12 @@ class MovieSearchDataSource @Inject constructor(
             }
             .onErrorReturn(MovieState::Error)
             .toFlowable()
-            .startWith(MovieState.Loading)
-            .subscribe(liveData::postValue)
+            .startWith(MovieState.Loading).also {
+                EspressoIdlingResource.increment()
+            }
+            .subscribe(liveData::postValue).also {
+                EspressoIdlingResource.decrement()
+            }
             .let { return@let disposable::add }
     }
 

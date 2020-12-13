@@ -28,7 +28,7 @@ class TvFavFragment : Fragment(), TvInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvTv.also {
+        rvFavTv.also {
             it.adapter = adapter
             it.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }

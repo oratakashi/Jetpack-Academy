@@ -6,12 +6,15 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -34,17 +37,22 @@ class MainActivityTest {
 
     @Test
     fun checkTabDisplayed() {
-        onView(withId(R.id.bnMenu))
+        onView(allOf(withId(R.id.bnMenu), isDisplayed()))
             .perform(click())
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Test
     fun swipePage() {
         onView(withId(R.id.vpMain))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(ViewAssertions.matches(isDisplayed()))
         onView(withId(R.id.vpMain))
             .perform(ViewActions.swipeLeft())
+        onView(withId(R.id.vpMain))
+            .perform(ViewActions.swipeLeft())
+        onView(withId(R.id.vpMain))
+            .perform(ViewActions.swipeDown())
+        onView(withId(R.id.vpMain))
+            .perform(ViewActions.swipeRight())
         onView(withId(R.id.vpMain))
             .perform(ViewActions.swipeDown())
         onView(withId(R.id.vpMain))

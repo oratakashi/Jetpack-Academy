@@ -34,12 +34,12 @@ class FavoriteFragment : Fragment(), MainInterface.Fragment {
             it.isUserInputEnabled = false
             it.offscreenPageLimit = 2
         }
-        bnMenu.setupViewPager(vpFav)
-        bnMenu.addBubbleListener(object : OnBubbleClickListener {
+        bnSubMenu.setupViewPager(vpFav)
+        bnSubMenu.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.navigation_movie   -> vpFav.setCurrentItem(0, true)
-                    R.id.navigation_tv      -> vpFav.setCurrentItem(1, true)
+                    R.id.navigation_fav_movie   -> vpFav.setCurrentItem(0, true)
+                    R.id.navigation_fav_tv      -> vpFav.setCurrentItem(1, true)
                 }
             }
         })

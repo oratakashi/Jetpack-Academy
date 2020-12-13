@@ -8,13 +8,16 @@ import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 @Dao
 interface TvDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(data : DataTv)
+    fun add(data : DataTv) : Long
 
     @Query("SELECT * from tv where id = :id")
     fun getDataById(id : String) : List<DataTv>
 
     @Query("SELECT * from tv")
     fun getData() : DataSource.Factory<Int, DataTv>
+
+    @Query("SELECT * from tv")
+    fun getDataList() : List<DataTv>
 
     @Query("SELECT * From tv where name like :query")
     fun searchData(query : String) : DataSource.Factory<Int, DataTv>

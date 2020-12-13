@@ -17,6 +17,7 @@ import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import com.oratakashi.jetpackacademy.utils.RecyclerViewItemCountAssertion
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -46,12 +47,11 @@ class TvFragmentTest {
     @Test
     fun loadTvShows() {
         Thread.sleep(3000)
-        onView(withId(R.id.rvTv))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
         Thread.sleep(3000)
-        onView(withId(R.id.rvTv))
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
-        onView(withId(R.id.rvTv))
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
             .check(RecyclerViewItemCountAssertion(20))
     }
 }

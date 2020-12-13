@@ -1,9 +1,10 @@
-package com.oratakashi.jetpackacademy.ui.movie.detail
+package com.oratakashi.jetpackacademy.ui.favorite.movie
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -17,14 +18,15 @@ import com.oratakashi.jetpackacademy.ui.movie.MovieState
 import com.oratakashi.jetpackacademy.ui.movie.MovieViewModel
 import com.oratakashi.jetpackacademy.utils.Converter
 import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
+import com.oratakashi.jetpackacademy.utils.RecyclerViewItemEmptyAssertion
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.allOf
 import org.junit.*
 import javax.inject.Inject
 
 @HiltAndroidTest
-class DetailMovieActvityTest {
+class MovieFavFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -32,8 +34,11 @@ class DetailMovieActvityTest {
     @get:Rule
     var activityRule = ActivityTestRule(MainActivity::class.java)
 
-    @Inject lateinit var repository: Repository
-    @Inject lateinit var storage: Storage
+    @Inject
+    lateinit var repository: Repository
+
+    @Inject
+    lateinit var storage: Storage
 
     lateinit var viewModel: MovieViewModel
 
@@ -51,16 +56,23 @@ class DetailMovieActvityTest {
     }
 
     @Test
-    fun getDetail(){
+    fun testInsert() {
         Thread.sleep(4000)
-        when(val state = viewModel.state.value){
-            is MovieState.Result    -> {
+        when (val state = viewModel.state.value) {
+            is MovieState.Result -> {
                 Assert.assertNotNull(state.data.data)
-                val data : DataMovie = state.data.data?.get(0)!!
-                onView(allOf(withId(R.id.rvMovie), isDisplayed())).perform(
-                    RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
-                        ViewActions.click()
-                    ))
+                val data: DataMovie = state.data.data?.get(0)!!
+                onView(
+                    allOf(
+                        withId(R.id.rvMovie),
+                        isDisplayed()
+                    )
+                ).perform(
+                    RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                        0,
+                        click()
+                    )
+                )
 
                 //Remove selected data on DB
                 repository.deleteData(data)
@@ -79,17 +91,21 @@ class DetailMovieActvityTest {
                 onView(withId(R.id.tvReleaseDate))
                     .check(matches(isDisplayed()))
                 onView(withId(R.id.tvReleaseDate))
-                    .check(matches(withText(
-                        Converter.dateFormat(
-                            data.release_date!!,
-                            "yyyy-mm-dd",
-                            "dd MMMM yyyy"
+                    .check(
+                        matches(
+                            withText(
+                                Converter.dateFormat(
+                                    data.release_date!!,
+                                    "yyyy-mm-dd",
+                                    "dd MMMM yyyy"
+                                )
+                            )
                         )
-                    )))
+                    )
 
                 //Insert Data on DB
                 onView(withId(R.id.ivFav))
-                    .perform(ViewActions.click())
+                    .perform(click())
 
                 Thread.sleep(3000)
 
@@ -97,6 +113,12 @@ class DetailMovieActvityTest {
                 val dataMovie = storage.movie().getDataById(data.id)
                 Assert.assertNotNull(dataMovie)
                 Assert.assertTrue(dataMovie.isNotEmpty())
+
+                //Exit Activity
+                onView(withId(R.id.fab))
+                    .check(matches(isDisplayed()))
+                onView(withId(R.id.fab))
+                    .perform(click())
             }
             is MovieState.Loading -> {
 
@@ -108,5 +130,23 @@ class DetailMovieActvityTest {
                 throw UnknownError()
             }
         }
+    }
+
+    @Test
+    fun testSelect() {
+        onView(withId(R.id.vpMain))
+            .perform(swipeLeft())
+        Thread.sleep(1000)
+        onView(withId(R.id.vpMain))
+            .perform(swipeLeft())
+
+        //Wait to Swipe into Favorite
+        Thread.sleep(3000)
+
+        onView(allOf(withId(R.id.navigation_fav_movie), isDisplayed()))
+            .perform(click())
+        onView(allOf(withId(R.id.rvFavMovie), isDisplayed()))
+        onView(allOf(withId(R.id.rvFavMovie), isDisplayed()))
+            .check(RecyclerViewItemEmptyAssertion(1))
     }
 }

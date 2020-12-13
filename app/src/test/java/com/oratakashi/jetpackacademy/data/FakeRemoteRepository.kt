@@ -1,6 +1,5 @@
 package com.oratakashi.jetpackacademy.data
 
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.oratakashi.jetpackacademy.BuildConfig
 import com.oratakashi.jetpackacademy.core.Config
 import com.oratakashi.jetpackacademy.data.model.movie.ResponseMovie
@@ -23,7 +22,8 @@ class FakeRemoteRepository {
             }
         }
     }
-    private fun providesApiKey() : Interceptor = object : Interceptor {
+
+    private fun providesApiKey(): Interceptor = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             var request: Request = chain.request()
             val url: HttpUrl = request.url.newBuilder()
@@ -33,6 +33,7 @@ class FakeRemoteRepository {
             return chain.proceed(request)
         }
     }
+
     private fun providesHttpClient(
         interceptor: HttpLoggingInterceptor,
         apiKey: Interceptor
@@ -45,25 +46,28 @@ class FakeRemoteRepository {
             addInterceptor(apiKey)
         }.build()
     }
-    private fun getRetrofit() : Retrofit = Retrofit.Builder().apply {
+
+    private fun getRetrofit(): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.BASE_URL)
-        client(providesHttpClient(
-            providesHttpLoggingInterceptor(),
-            providesApiKey()
-        ))
+        client(
+            providesHttpClient(
+                providesHttpLoggingInterceptor(),
+                providesApiKey()
+            )
+        )
         addConverterFactory(GsonConverterFactory.create())
         addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
     }.build()
 
-    fun getMovie() : Single<ResponseMovie> =
+    fun getMovie(): Single<ResponseMovie> =
         getRetrofit().create(ApiEndpoint::class.java).getMovie(1)
 
-    fun searchMovie(keyword : String) : Single<ResponseMovie> =
+    fun searchMovie(keyword: String): Single<ResponseMovie> =
         getRetrofit().create(ApiEndpoint::class.java).searchMovie(keyword, 1)
 
-    fun getTv() : Single<ResponseTv> =
+    fun getTv(): Single<ResponseTv> =
         getRetrofit().create(ApiEndpoint::class.java).getTv(1)
 
-    fun searchTv(keyword: String) : Single<ResponseTv> =
+    fun searchTv(keyword: String): Single<ResponseTv> =
         getRetrofit().create(ApiEndpoint::class.java).searchTv(keyword, 1)
 }

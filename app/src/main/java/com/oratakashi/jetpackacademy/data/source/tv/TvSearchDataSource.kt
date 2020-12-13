@@ -5,6 +5,7 @@ import androidx.paging.PageKeyedDataSource
 import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 import com.oratakashi.jetpackacademy.data.network.ApiEndpoint
 import com.oratakashi.jetpackacademy.ui.tv.TvState
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -30,8 +31,12 @@ class TvSearchDataSource @Inject constructor(
             }
             .onErrorReturn(TvState::Error)
             .toFlowable()
-            .startWith(TvState.Loading)
-            .subscribe(liveData::postValue)
+            .startWith(TvState.Loading).also {
+                EspressoIdlingResource.increment()
+            }
+            .subscribe(liveData::postValue).also {
+                EspressoIdlingResource.decrement()
+            }
             .let { return@let disposable::add }
     }
 
