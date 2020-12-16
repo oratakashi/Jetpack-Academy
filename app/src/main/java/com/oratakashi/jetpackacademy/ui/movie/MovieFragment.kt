@@ -45,29 +45,23 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it){
                 is MovieState.Loading   -> {
-                    if(EspressoIdlingResource.isMovie)  {
-                        EspressoIdlingResource.increment()
-                    }
                     shLoading.visibility = View.VISIBLE
                     rvMovie.visibility = View.GONE
                     shLoading.startShimmerAnimation()
+                    EspressoIdlingResource.increment()
                 }
                 is MovieState.Result    -> {
-                    if(EspressoIdlingResource.isMovie)  {
-                        EspressoIdlingResource.decrement()
-                    }
                     if(shLoading.isVisible){
                         shLoading.stopShimmerAnimation()
                         shLoading.visibility = View.GONE
                     }
                     if(!rvMovie.isVisible){
                         rvMovie.visibility = View.VISIBLE
+                        EspressoIdlingResource.decrement()
                     }
                 }
                 is MovieState.Error     -> {
-                    if(EspressoIdlingResource.isMovie) {
-                        EspressoIdlingResource.decrement()
-                    }
+                    EspressoIdlingResource.decrement()
                     shLoading.visibility = View.GONE
                     shLoading.stopShimmerAnimation()
                     rvMovie.visibility = View.VISIBLE

@@ -44,23 +44,23 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it){
                 is TvState.Loading  -> {
-                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.increment()
+                    EspressoIdlingResource.increment()
                     shLoading.visibility = View.VISIBLE
                     rvTv.visibility = View.GONE
                     shLoading.startShimmerAnimation()
                 }
                 is TvState.Result   -> {
-                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.decrement()
                     if(shLoading.isVisible){
                         shLoading.stopShimmerAnimation()
                         shLoading.visibility = View.GONE
                     }
                     if(!rvTv.isVisible){
+                        EspressoIdlingResource.decrement()
                         rvTv.visibility = View.VISIBLE
                     }
                 }
                 is TvState.Error    -> {
-                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.decrement()
+                    EspressoIdlingResource.decrement()
                     shLoading.visibility = View.GONE
                     shLoading.stopShimmerAnimation()
                     rvTv.visibility = View.VISIBLE
