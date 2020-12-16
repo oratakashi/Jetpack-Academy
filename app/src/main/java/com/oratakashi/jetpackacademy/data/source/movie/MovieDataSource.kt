@@ -38,12 +38,8 @@ class MovieDataSource @Inject constructor(
             }
             .onErrorReturn(MovieState::Error)
             .toFlowable()
-            .startWith(MovieState.Loading).also {
-                EspressoIdlingResource.increment()
-            }
-            .subscribe(liveData::postValue).also {
-                EspressoIdlingResource.decrement()
-            }
+            .startWith(MovieState.Loading)
+            .subscribe(liveData::postValue)
             .let { return@let disposable::add }
     }
 

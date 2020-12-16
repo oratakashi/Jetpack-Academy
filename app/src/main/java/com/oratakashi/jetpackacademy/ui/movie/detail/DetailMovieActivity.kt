@@ -3,6 +3,7 @@ package com.oratakashi.jetpackacademy.ui.movie.detail
 import android.os.Bundle
 import android.transition.Fade
 import android.transition.Slide
+import android.util.Log
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity

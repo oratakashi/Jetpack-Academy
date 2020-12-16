@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), MainInterface.Activity {
         reduceDragSensitivity()
         vpMain.also {
             it.adapter = adapter
-            it.offscreenPageLimit = 3
+            it.offscreenPageLimit = 1
         }
         bnMenu.setupViewPager(vpMain)
         bnMenu.addBubbleListener(object : OnBubbleClickListener {

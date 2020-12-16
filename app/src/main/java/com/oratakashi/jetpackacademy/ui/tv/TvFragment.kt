@@ -17,6 +17,7 @@ import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.data.model.tv.DataTv
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.tv.detail.DetailTvActivity
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie.bottom_sheet
 import kotlinx.android.synthetic.main.fragment_tv.*
@@ -43,11 +44,13 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it){
                 is TvState.Loading  -> {
+                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.increment()
                     shLoading.visibility = View.VISIBLE
                     rvTv.visibility = View.GONE
                     shLoading.startShimmerAnimation()
                 }
                 is TvState.Result   -> {
+                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.decrement()
                     if(shLoading.isVisible){
                         shLoading.stopShimmerAnimation()
                         shLoading.visibility = View.GONE
@@ -57,6 +60,7 @@ class TvFragment : Fragment(), MainInterface.Fragment, TvInterface {
                     }
                 }
                 is TvState.Error    -> {
+                    if(EspressoIdlingResource.isTv) EspressoIdlingResource.decrement()
                     shLoading.visibility = View.GONE
                     shLoading.stopShimmerAnimation()
                     rvTv.visibility = View.VISIBLE

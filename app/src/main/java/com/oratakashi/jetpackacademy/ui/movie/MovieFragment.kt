@@ -17,16 +17,13 @@ import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.movie.detail.DetailMovieActivity
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
-
-    private val data : MutableList<DataMovie> by lazy {
-        ArrayList<DataMovie>()
-    }
 
     private val adapter : MovieAdapter by lazy {
         MovieAdapter(this)
@@ -48,11 +45,17 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it){
                 is MovieState.Loading   -> {
+                    if(EspressoIdlingResource.isMovie)  {
+                        EspressoIdlingResource.increment()
+                    }
                     shLoading.visibility = View.VISIBLE
                     rvMovie.visibility = View.GONE
                     shLoading.startShimmerAnimation()
                 }
                 is MovieState.Result    -> {
+                    if(EspressoIdlingResource.isMovie)  {
+                        EspressoIdlingResource.decrement()
+                    }
                     if(shLoading.isVisible){
                         shLoading.stopShimmerAnimation()
                         shLoading.visibility = View.GONE
@@ -62,6 +65,9 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     }
                 }
                 is MovieState.Error     -> {
+                    if(EspressoIdlingResource.isMovie) {
+                        EspressoIdlingResource.decrement()
+                    }
                     shLoading.visibility = View.GONE
                     shLoading.stopShimmerAnimation()
                     rvMovie.visibility = View.VISIBLE

@@ -12,6 +12,7 @@ import com.jakewharton.rxbinding3.widget.textChangeEvents
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.data.model.movie.ResponseMovie
 import com.oratakashi.jetpackacademy.data.repository.Repository
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
