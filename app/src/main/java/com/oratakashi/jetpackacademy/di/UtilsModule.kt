@@ -26,10 +26,10 @@ class UtilsModule {
     @Provides
     @Singleton
     fun provideConfig() : PagedList.Config = PagedList.Config.Builder()
-        .setPageSize(2)
+        .setPageSize(1)
         .setInitialLoadSizeHint(2)
-        .setPrefetchDistance(2)
-        .setEnablePlaceholders(true)
+        .setPrefetchDistance(1)
+        .setEnablePlaceholders(false)
         .build()
 
     @Provides

@@ -43,15 +43,15 @@ class MainActivity : AppCompatActivity(), MainInterface.Activity {
         reduceDragSensitivity()
         vpMain.also {
             it.adapter = adapter
-            it.offscreenPageLimit = 3
+            it.offscreenPageLimit = 1
         }
         bnMenu.setupViewPager(vpMain)
         bnMenu.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when (id) {
-                    R.id.navigation_movie -> vpMain.setCurrentItem(0, true)
-                    R.id.navigation_tv -> vpMain.setCurrentItem(1, true)
-                    R.id.navigation_fav -> vpMain.setCurrentItem(2, true)
+                    R.id.navigation_movie -> vpMain.setCurrentItem(0, false)
+                    R.id.navigation_tv -> vpMain.setCurrentItem(1, false)
+                    R.id.navigation_fav -> vpMain.setCurrentItem(2, false)
                 }
             }
         })

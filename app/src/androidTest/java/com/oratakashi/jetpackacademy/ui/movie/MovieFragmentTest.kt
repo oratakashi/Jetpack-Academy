@@ -33,6 +33,7 @@ class MovieFragmentTest {
 
     @Before
     fun setUp() {
+        EspressoIdlingResource.isMovie = true
         IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
     }
 
@@ -43,11 +44,10 @@ class MovieFragmentTest {
 
     @Test
     fun loadMovies() {
-        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
-        Thread.sleep(3000)
-        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
+        Espresso.onView(allOf(isDisplayed(), withId(R.id.rvMovie)))
+        Espresso.onView(allOf(isDisplayed(), withId(R.id.rvMovie)))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
-        Espresso.onView(allOf(withId(R.id.rvMovie), isDisplayed()))
+        Espresso.onView(allOf(isDisplayed(), withId(R.id.rvMovie)))
             .check(RecyclerViewItemCountAssertion(20))
     }
 }

@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="Theme.JetpackAcademy.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -27,6 +28,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="coolEditTextFlat" parent="Base.Widget.AppCompat.EditText">

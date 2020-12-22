@@ -34,6 +34,7 @@ class TvFragmentTest {
 
     @Before
     fun setUp() {
+        EspressoIdlingResource.isTv = true
         IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
         onView(withId(R.id.vpMain))
             .perform(ViewActions.swipeLeft())
@@ -46,9 +47,7 @@ class TvFragmentTest {
 
     @Test
     fun loadTvShows() {
-        Thread.sleep(3000)
         onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
-        Thread.sleep(3000)
         onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
         onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))

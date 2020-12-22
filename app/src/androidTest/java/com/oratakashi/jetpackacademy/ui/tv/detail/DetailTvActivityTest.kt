@@ -1,7 +1,6 @@
 package com.oratakashi.jetpackacademy.ui.tv.detail
 
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
@@ -12,13 +11,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.data.database.Storage
-import com.oratakashi.jetpackacademy.data.model.tv.DataTv
+import com.oratakashi.jetpackacademy.data.network.ApiEndpoint
 import com.oratakashi.jetpackacademy.data.repository.Repository
 import com.oratakashi.jetpackacademy.ui.main.MainActivity
-import com.oratakashi.jetpackacademy.ui.tv.TvState
 import com.oratakashi.jetpackacademy.ui.tv.TvViewModel
 import com.oratakashi.jetpackacademy.utils.Converter
 import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
+import com.oratakashi.jetpackacademy.utils.RecyclerViewItemCountAssertion
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers
@@ -34,19 +33,20 @@ class DetailTvActivityTest {
     @get:Rule
     var activityRule = ActivityTestRule(MainActivity::class.java)
 
-    @Inject lateinit var repository: Repository
-    @Inject lateinit var storage: Storage
-
-    lateinit var viewModel: TvViewModel
+    @Inject
+    lateinit var repository: Repository
+    @Inject
+    lateinit var storage: Storage
+    @Inject
+    lateinit var endpoint: ApiEndpoint
 
     @Before
-    fun setUp(){
+    fun setUp() {
         onView(withId(R.id.vpMain))
             .perform(ViewActions.swipeLeft())
+        EspressoIdlingResource.isTv = true
         hiltRule.inject()
 
-        viewModel = TvViewModel(repository)
-        viewModel.getTv()
         IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
     }
 
@@ -56,68 +56,60 @@ class DetailTvActivityTest {
     }
 
     @Test
-    fun getDetail(){
-        Thread.sleep(3000)
+    fun getDetail() {
+        val getData = endpoint.getTv(1)
+            .blockingGet()
+
+        val dataTv = getData.data!![0]
         onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
-        Thread.sleep(3000)
-        when(val state = viewModel.state.value){
-            is TvState.Result   -> {
-                Assert.assertNotNull(state.data.data)
-                val data : DataTv = state.data.data?.get(0)!!
-                onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv))).perform(
-                    RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
-                        ViewActions.click()
-                    )
-                )
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
+            .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv)))
+            .check(RecyclerViewItemCountAssertion(20))
 
-                //Remove selected data on DB
-                repository.deleteData(data)
+        onView(Matchers.allOf(ViewMatchers.isDisplayed(), withId(R.id.rvTv))).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
 
-                //Wait 3 Second
-                Thread.sleep(3000)
+        EspressoIdlingResource.incrementTest()
+        //Remove selected data on DB
+        repository.deleteData(dataTv)
+        EspressoIdlingResource.decrementTest()
 
-                onView(withId(R.id.tvTitle))
-                    .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                onView(withId(R.id.tvTitle))
-                    .check(ViewAssertions.matches(ViewMatchers.withText(data.name)))
-                onView(withId(R.id.tvDescription))
-                    .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                onView(withId(R.id.tvDescription))
-                    .check(ViewAssertions.matches(ViewMatchers.withText(data.overview)))
-                onView(withId(R.id.tvReleaseDate))
-                    .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                onView(withId(R.id.tvReleaseDate))
-                    .check(
-                        ViewAssertions.matches(
-                            ViewMatchers.withText(
-                                Converter.dateFormat(
-                                    data.first_air_date!!,
-                                    "yyyy-mm-dd",
-                                    "dd MMMM yyyy"
-                                )
-                            )
+        onView(withId(R.id.tvTitle))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.tvTitle))
+            .check(ViewAssertions.matches(ViewMatchers.withText(dataTv.name)))
+        onView(withId(R.id.tvDescription))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.tvDescription))
+            .check(ViewAssertions.matches(ViewMatchers.withText(dataTv.overview)))
+        onView(withId(R.id.tvReleaseDate))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.tvReleaseDate))
+            .check(
+                ViewAssertions.matches(
+                    ViewMatchers.withText(
+                        Converter.dateFormat(
+                            dataTv.first_air_date!!,
+                            "yyyy-mm-dd",
+                            "dd MMMM yyyy"
                         )
                     )
+                )
+            )
 
-                //Insert Data on DB
-                onView(withId(R.id.ivFav))
-                    .perform(ViewActions.click())
+        EspressoIdlingResource.incrementTest()
+        //Insert Data on DB
+        onView(withId(R.id.ivFav))
+            .perform(ViewActions.click())
+        EspressoIdlingResource.decrementTest()
 
-                Thread.sleep(3000)
 
-                val dataTv = storage.tv().getDataById(data.id)
-                Assert.assertNotNull(dataTv)
-                Assert.assertTrue(dataTv.isNotEmpty())
-            }
-            is TvState.Loading  -> {
-
-            }
-            is TvState.Error    -> {
-                throw Throwable(state.error.message)
-            }
-            else -> {
-                throw UnknownError()
-            }
-        }
+        val dataDb = storage.tv().getDataById(dataTv.id)
+        Assert.assertNotNull(dataDb)
     }
 }

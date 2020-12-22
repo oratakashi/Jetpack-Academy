@@ -17,16 +17,13 @@ import com.oratakashi.jetpackacademy.R
 import com.oratakashi.jetpackacademy.data.model.movie.DataMovie
 import com.oratakashi.jetpackacademy.ui.main.MainInterface
 import com.oratakashi.jetpackacademy.ui.movie.detail.DetailMovieActivity
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
-
-    private val data : MutableList<DataMovie> by lazy {
-        ArrayList<DataMovie>()
-    }
 
     private val adapter : MovieAdapter by lazy {
         MovieAdapter(this)
@@ -51,6 +48,7 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     shLoading.visibility = View.VISIBLE
                     rvMovie.visibility = View.GONE
                     shLoading.startShimmerAnimation()
+                    EspressoIdlingResource.increment()
                 }
                 is MovieState.Result    -> {
                     if(shLoading.isVisible){
@@ -59,9 +57,11 @@ class MovieFragment : Fragment(), MainInterface.Fragment, MovieInterface {
                     }
                     if(!rvMovie.isVisible){
                         rvMovie.visibility = View.VISIBLE
+                        EspressoIdlingResource.decrement()
                     }
                 }
                 is MovieState.Error     -> {
+                    EspressoIdlingResource.decrement()
                     shLoading.visibility = View.GONE
                     shLoading.stopShimmerAnimation()
                     rvMovie.visibility = View.VISIBLE
