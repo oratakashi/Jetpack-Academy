@@ -22,7 +22,7 @@
  <hr>
  </span>
  <h1>Download Demo</h1>
- https://download.oratakashi.com/restofinder.apk
+ https://download.oratakashi.com/jetpackAcademy.apk
  <br>
  
  
