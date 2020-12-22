@@ -10,6 +10,7 @@ import com.oratakashi.jetpackacademy.data.repository.local.LocalRepository
 import com.oratakashi.jetpackacademy.data.repository.remote.RemoteRepository
 import com.oratakashi.jetpackacademy.ui.movie.MovieState
 import com.oratakashi.jetpackacademy.ui.tv.TvState
+import com.oratakashi.jetpackacademy.utils.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import javax.inject.Singleton

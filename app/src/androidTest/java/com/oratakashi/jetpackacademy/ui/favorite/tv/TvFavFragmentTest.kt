@@ -59,6 +59,7 @@ class TvFavFragmentTest {
 
     @Test
     fun testInsert() {
+
         val getData = endpoint.getTv(1)
             .blockingGet()
 
@@ -120,12 +121,9 @@ class TvFavFragmentTest {
     fun testSelect() {
         Espresso.onView(ViewMatchers.withId(R.id.vpMain))
             .perform(ViewActions.swipeLeft())
-        Thread.sleep(1000)
+
         Espresso.onView(ViewMatchers.withId(R.id.vpMain))
             .perform(ViewActions.swipeLeft())
-
-        //Wait to Swipe into Favorite
-        Thread.sleep(3000)
 
         Espresso.onView(
             Matchers.allOf(

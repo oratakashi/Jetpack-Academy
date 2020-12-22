@@ -121,14 +121,15 @@ class MovieFavFragmentTest {
 
     @Test
     fun testSelect() {
+
         onView(withId(R.id.vpMain))
             .perform(swipeLeft())
-        Thread.sleep(1000)
+
         onView(withId(R.id.vpMain))
             .perform(swipeLeft())
 
         //Wait to Swipe into Favorite
-        Thread.sleep(3000)
+
 
         onView(allOf(withId(R.id.navigation_fav_movie), isDisplayed()))
             .perform(click())
