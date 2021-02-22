@@ -34,6 +34,7 @@ class FavoriteFragment : Fragment(), MainInterface.Fragment {
             it.isUserInputEnabled = false
             it.offscreenPageLimit = 2
         }
+
         bnSubMenu.setupViewPager(vpFav)
         bnSubMenu.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
